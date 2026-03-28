@@ -1,0 +1,15 @@
+{
+    "name": "reinventing-the-wheel",
+    "version": "0.69.1",
+    "title": "Reinventing the Wheel",
+    "author": "Loup&Snoop, 2026",
+    "factorio_version": "2.0",
+    "dependencies": ["base >= 2.0.69",
+        "! delete-gleba"
+    ],
+    "description": "Adds duplicate technologies to your tech tree to give immersive 'research the same thing again' gameplay!",
+    "homepage": "https://discord.gg/CaDJzEj557",
+    "package":{
+        "ignore":[ "**/*.mp3", "**/*.xcf", "**/*.zip", ".vscode/*", "deprecated/*"]
+    }
+}
