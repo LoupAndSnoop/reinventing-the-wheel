@@ -73,6 +73,9 @@ local function add_dupes_to_prerequisites(tech_prototype)
         end
     end
 
+    --Sort for more reliable results
+    table.sort(dupable_prerequisites)
+
     --Now we go stochastically adding dupes
     for _, entry in pairs(dupable_prerequisites) do
         for i = 1, DUPLICATE_COUNT do
@@ -87,12 +90,20 @@ local function add_dupes_to_prerequisites(tech_prototype)
 end
 
 
---Add dupes to all tech prototypes, then the copies
-for _, proto in pairs(data.raw["technology"]) do
-    add_dupes_to_prerequisites(proto)
+--Make a list of deterministic order, to ensure consistent RNG calls for adding dupes
+local all_tech_names = {}
+local all_tech_prototypes = {} --Dictionary to associate
+for name, proto in pairs(data.raw["technology"]) do
+    all_tech_prototypes[name] = proto
+    table.insert(all_tech_names, name)
 end
-for _, proto in pairs(original_techs_to_dupe or {}) do
-    add_dupes_to_prerequisites(proto)
+for name, proto in pairs(original_techs_to_dupe or {}) do
+    all_tech_prototypes[name] = proto
+    table.insert(all_tech_names, name)
+end
+table.sort(all_tech_names)
+for _, name in pairs(data.raw["technology"]) do
+    add_dupes_to_prerequisites(all_tech_prototypes[name])
 end
 
 
