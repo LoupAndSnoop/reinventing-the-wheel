@@ -2,7 +2,7 @@ local randlib = require("randlib")
 
 local DUPLICATE_COUNT = settings.startup["rtw-duplicate-count"].value
 local PREREQ_SEED = settings.startup["rtw-prerequisite-seed"].value
-local RANDOM_GENERATOR = randlib.random.new(PREREQ_SEED)
+--local RANDOM_GENERATOR = randlib.random.new(PREREQ_SEED)
 local DUPABLE_PREREQUISITE_CHANCE = settings.startup["rtw-prerequisite-chance"].value -- Out of 100
 
 --First we need to count up all the relevant technology names to duplicate.
@@ -76,11 +76,14 @@ local function add_dupes_to_prerequisites(tech_prototype)
     --Sort for more reliable results
     table.sort(dupable_prerequisites)
 
+    --Make a generator based on the seed and tech name for consistency
+    local generator = randlib.random.for_v(tech_prototype.name, PREREQ_SEED)
+    --log("Generator outputs for " .. tech_prototype.name .. " = " .. tostring(randlib.random.value(generator)) .. " - " .. tostring(randlib.random.value(generator)) .. " - " .. tostring(randlib.random.value(generator)))
+
     --Now we go stochastically adding dupes
     for _, entry in pairs(dupable_prerequisites) do
         for i = 1, DUPLICATE_COUNT do
-            local rng = randlib.random.value(RANDOM_GENERATOR) * 100        
-            --math.random(1, 100)
+            local rng = randlib.random.value(generator) * 100
             if rng < DUPABLE_PREREQUISITE_CHANCE then
                 table.insert(tech_prototype.prerequisites,
                     make_duplicate_name_i(entry,i))
@@ -92,20 +95,16 @@ end
 
 --Make a list of deterministic order, to ensure consistent RNG calls for adding dupes
 local all_tech_names = {}
-local all_tech_prototypes = {} --Dictionary to associate
-for name, proto in pairs(data.raw["technology"]) do
-    all_tech_prototypes[name] = proto
-    table.insert(all_tech_names, name)
-end
-for name, proto in pairs(original_techs_to_dupe or {}) do
-    all_tech_prototypes[name] = proto
+for name in pairs(data.raw["technology"]) do
     table.insert(all_tech_names, name)
 end
 table.sort(all_tech_names)
-for _, name in pairs(data.raw["technology"]) do
-    add_dupes_to_prerequisites(all_tech_prototypes[name])
+for _, name in pairs(all_tech_names) do
+    add_dupes_to_prerequisites(data.raw["technology"][name])
 end
-
+for _, name in pairs(all_tech_names) do
+    add_dupes_to_prerequisites(original_techs_to_dupe[name])
+end
 
 --Go make the duplicate techs
 for name, tech in pairs(original_techs_to_dupe) do

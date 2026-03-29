@@ -1,4 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.69.3
+Date: ????
+  Changes:
+    - Fixed a bug where no dupes would be made prereqs.
+    - Made the prereqs more deterministically randomized, so small changes to the tech tree or mod order should preserve the prerequisites.
+    - Tweaked default settings.
+---------------------------------------------------------------------------------------------------
 Version: 0.69.2
 Date: ????
   Changes:
