@@ -152,7 +152,9 @@ end
 ---@param v hashable
 function F.hash.write(hasher, v)
     if type(v) == "string" then
-        for i = 1, math.min(#v, 30) do --Editted from the original randlib due to overflow
+        --Editted from the original randlib due to overflow
+        for i = #v, math.max(1, #v - 15), -1 do
+        --for i = 1, math.min(#v, 28) do 
             hasher.h = hasher.h * 2 + v:byte(i)
         end
     elseif type(v) == "number" then

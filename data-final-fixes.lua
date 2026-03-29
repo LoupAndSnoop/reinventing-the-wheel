@@ -76,12 +76,20 @@ local function add_dupes_to_prerequisites(tech_prototype)
     --Sort for more reliable results
     table.sort(dupable_prerequisites)
 
-    --Make a generator based on the seed and tech name for consistency
-    local generator = randlib.random.for_v(tech_prototype.name, PREREQ_SEED)
+    --Alt RNG version: Make a generator based on the seed and tech name for consistency
+    --local generator = randlib.random.for_v(tech_prototype.name, PREREQ_SEED)
     --log("Generator outputs for " .. tech_prototype.name .. " = " .. tostring(randlib.random.value(generator)) .. " - " .. tostring(randlib.random.value(generator)) .. " - " .. tostring(randlib.random.value(generator)))
 
     --Now we go stochastically adding dupes
     for _, entry in pairs(dupable_prerequisites) do
+        --Make a random generator that is a function of both the prototype name AND the prereq name, in case prereqs change
+        local hasher = randlib.hash.new(PREREQ_SEED)
+        hasher:write(tech_prototype.name)
+        hasher:write(entry)
+        local local_seed = hasher:finish()
+        local generator = randlib.random.new(local_seed)
+        log("Generator outputs for " .. tech_prototype.name .. " = " .. tostring(randlib.random.value(generator)) .. " - " .. tostring(randlib.random.value(generator)) .. " - " .. tostring(randlib.random.value(generator)))
+
         for i = 1, DUPLICATE_COUNT do
             local rng = randlib.random.value(generator) * 100
             if rng < DUPABLE_PREREQUISITE_CHANCE then

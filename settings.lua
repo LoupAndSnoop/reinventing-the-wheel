@@ -12,7 +12,7 @@ data:extend({
         type = "int-setting",
         name = "rtw-prerequisite-chance",
         setting_type = "startup",
-        default_value = 25,
+        default_value = 20,
         minimum_value = 1,
         maximum_value = 100,
         order = "b",
