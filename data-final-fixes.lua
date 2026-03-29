@@ -88,7 +88,7 @@ local function add_dupes_to_prerequisites(tech_prototype)
         hasher:write(entry)
         local local_seed = hasher:finish()
         local generator = randlib.random.new(local_seed)
-        log("Generator outputs for " .. tech_prototype.name .. " = " .. tostring(randlib.random.value(generator)) .. " - " .. tostring(randlib.random.value(generator)) .. " - " .. tostring(randlib.random.value(generator)))
+        --log("Generator outputs for " .. tech_prototype.name .. " = " .. tostring(randlib.random.value(generator)) .. " - " .. tostring(randlib.random.value(generator)) .. " - " .. tostring(randlib.random.value(generator)))
 
         for i = 1, DUPLICATE_COUNT do
             local rng = randlib.random.value(generator) * 100
