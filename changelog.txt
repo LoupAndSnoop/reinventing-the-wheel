@@ -2,6 +2,8 @@
 Version: 0.69.2
 Date: ????
   Changes:
+    - Made the RNG calls more deterministic for determining which prereqs are actually needed. Now, changing your modpack without changing the total techs won't necessarily change your prereqs.
+    - Fixed bounds on settings to ensure at least some RNG prereqs being needed.
 ---------------------------------------------------------------------------------------------------
 Version: 0.69.1
 Date: ????
